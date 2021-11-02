@@ -33,8 +33,8 @@
    <td><input type="text" placeholder="City" name="City" autocomplete="off" required></td>
    <tr>
    <td><b>Designation:</b><br>
-   	 <input type="text" name="Design" list="Fruit-list">
-	 <datalist id="Fruit-list">
+   	 <input type="text" name="Design" list="list">
+	 <datalist id="list">
 	  <option value="Admin">
 	  <option value="User">
 	 </datalist>

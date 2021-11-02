@@ -9,8 +9,6 @@ class home extends CI_Model
 		$row=$q->result();
 		if(sizeof($row)==1)
 			return 1;
-		else
-			return 0;
 	}
 	public function getUserList()
 	{

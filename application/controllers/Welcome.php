@@ -14,7 +14,7 @@ class Welcome extends CI_Controller
 		$Pass=$this->input->post("Pass");
 		$this->load->model("home");
 		$_SESSION['login']=$this->home->Check($Email,$Pass);
-		if(isset($_SESSION['login']))
+		if($_SESSION['login']==1)
 			$this->ShowUser();
 		else
 		{
