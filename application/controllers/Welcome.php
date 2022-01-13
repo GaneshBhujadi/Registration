@@ -1,9 +1,14 @@
 <?php
-session_start();
+// session_start();
 defined('BASEPATH') OR exit('No direct script access allowed');
 
 class Welcome extends CI_Controller 
 {
+	public function __construct()
+	{
+		parent :: __construct();
+		$this->load->model('home');
+	}
 	public function index()
 	{
 		$this->load->view("login");
@@ -12,44 +17,48 @@ class Welcome extends CI_Controller
 	{
 		$Email=$this->input->post("User");
 		$Pass=$this->input->post("Pass");
-		$this->load->model("home");
-		$_SESSION['login']=$this->home->Check($Email,$Pass);
-		if($_SESSION['login']==1)
-			$this->ShowUser();
-		else
-		{
+		$this->session->set_userdata('login',$this->home->Check($Email,$Pass));
+		if($this->session->userdata['login']==1){
+			// 	$this->ShowUser();
+			// base_url('');
+			// base_url('users');
+			redirect('users','refresh',301);
+
+		} else {
 			echo "<script>alert('Please enter valid Email ID or Password')</script>";
 			$this->load->view("login");
+			// base_url('users','refresh',301);
 		}
 	}
 	public function logout()
 	{
-		session_destroy();
+		// session_destroy();
 		$this->load->view("login");
 	}
 	public function ShowUser()
 	{
-		if($_SESSION['login']==1)
+		if($this->session->userdata['login']==1)
 		{
-			$this->load->model("home");
-			$rs['result']=$this->home->getUserList();
-			$this->load->view("UserList",$rs);
+			$data['result']=$this->home->getUserList();
+			$this->load->view("UserList",$data);
 		}
 		else
 			$this->load->view("login");
 	}
 	public function DeleteUser()
 	{
-		if(!$_SESSION['login']==1)
-			$this->load->view("login");
-		$SrNo=$this->input->post("SrNo");
-		$this->load->model("home");
-		$this->home->DeleteUser($SrNo);
-		$this->ShowUser();
+		if(!empty($this->input->post()){
+			$this->home->DeleteUser($id);
+			$this->session->set_flashdata('success','Recored deleted');
+			$this->load->view('users');
+			// redirect('users','refresh',301);
+		} else {
+			$this->session->set_flashdata('error','Unable Recored deleted');
+		}
 	}
 	public function register()
 	{
-		if(!$_SESSION['login']==1)
+		if(!$this->session->set_userdata['login']==1)
 			$this->load->view("login");
 		$this->load->view("Register");
 	}
@@ -83,7 +92,6 @@ class Welcome extends CI_Controller
 		  		$user["Design"]=$this->input->post("Design");
 		  		$user["Email"]=$this->input->post("Email");
 		  		$user["Pass"]=$this->input->post("Pass");
-		  		$this->load->model("home");
 		  		$inserted=$this->home->InsertUser($user);
 		  		if($inserted==1)
 		  			$this->ShowUser();
@@ -110,7 +118,6 @@ class Welcome extends CI_Controller
 		$edit=$this->input->post("update");
 		if($edit==1)
 		{
-			$this->load->model("home");
 			$updated=$this->home->UpdateUser($update);
 			if($updated==1)
 			{

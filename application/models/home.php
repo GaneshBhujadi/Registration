@@ -12,8 +12,9 @@ class home extends CI_Model
 	}
 	public function getUserList()
 	{
-		$query=$this->db->query("select SrNo,Name,Mob,City,Email,Img from Users");
-		return $query->result();
+		$this->db->select('SrNo,Name,Mob,City,Email,Img');
+		$this->db->from(USERS);
+		return $this->db->get()->result_array();
 	}
 	public function DeleteUser($SrNo)
 	{

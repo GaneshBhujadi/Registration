@@ -28,7 +28,9 @@
  </head>
  <body>
    <div id="login">
-    <form action="Valid" method="post">
+	   <?php $attributes = array('role' => 'form','id' => 'login_form');
+	    echo form_open('check_login',$attributes);?>
+    <!-- <form action="check_login" method="post"> -->
 	 <div class="form-input">
 		<h2>Admin login</h2>
 	  <input type="text" name="User" placeholder="User" autocomplete="off" autofocus required />
@@ -39,7 +41,8 @@
 	  <i class="fas fa-lock"></i>
 	 </div>
 	 <input class="btn-login" type="submit" value="Sign In"/>
-    </form>
+    <!-- </form> -->
+	<?php echo form_close();?>
    </div>
  </body>
 </html>

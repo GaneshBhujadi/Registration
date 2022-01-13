@@ -47,28 +47,46 @@
     <?php
      foreach($result as $row){?>
     <tr id="tr2">
-     <form action="Edit" method="post">
-      <td><img src="UserImg/<?php echo $row->Img;?>" height="150px" width="150px"></td>
-      <td><?php echo $row->SrNo;?> </td>
-      <td><?php echo $row->Name;?> </td>
-      <td><?php echo $row->Mob;?>  </td>
-      <td><?php echo $row->City;?> </td>
-      <td><?php echo $row->Email;?></td>
-	   <input type="hidden" name="SrNo" value="<?php echo $row->SrNo;?>">
-	   <input type="hidden" name="Name" value="<?php echo $row->Name;?>">  
-	   <input type="hidden" name="Mob" value="<?php echo $row->Mob;?>">
-	   <input type="hidden" name="City" value="<?php echo $row->City;?>">
-	   <input type="hidden" name="Email" value="<?php echo $row->Email;?>">
+     <!-- <form action="Edit" method="post"> -->
+      <td><img src="UserImg/<?php echo $row['Img'];?>" height="150px" width="150px"></td>
+      <td><?php echo $row['SrNo'];?> </td>
+      <td><?php echo $row['Name'];?> </td>
+      <td><?php echo $row['Mob'];?>  </td>
+      <td><?php echo $row['City'];?> </td>
+      <td><?php echo $row['Email'];?></td>
+	   <input type="hidden" name="SrNo" value="<?php echo $row['SrNo'];?>">
+	   <input type="hidden" name="Name" value="<?php echo $row['Name'];?>">  
+	   <input type="hidden" name="Mob" value="<?php echo $row['Mob'];?>">
+	   <input type="hidden" name="City" value="<?php echo $row['City'];?>">
+	   <input type="hidden" name="Email" value="<?php echo $row['Email'];?>">
 	   <input type="hidden" name="edit" value="0">
 	  <td><button id="update"><i class="far fa-edit"></i> Edit</button></td>
 	 </form>
 	 <form action="DeleteUser" method="post">
-	  <input type="hidden" name="SrNo" value="<?php echo $row->SrNo;?>">
-	  <td><button id="del"><i class="far fa-trash-alt"></i> Delete</button></td>
-	 </form>
+	  <input type="hidden" name="SrNo" value="<?php echo $row['SrNo'];?>">
+	  <td><a href="<?php //echo base_url('edit/'.$row['SrNo']);?>"><i id="delete" data-id="<?php echo $row['SrNo'];?>" class="far fa-trash-alt"></i> </a></td>
+	 <!-- </form> -->
+     <?php echo form_close();?>
     </tr>
 	 <?php } ?>
    </table>
   </div></center>
+  <input type="hidden" name="base_url" value="<?php echo base_url();?>">
  </body>
 </html>
+<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"> </script>
+<script>
+    $("#delete").click(function () { 
+        var id = $(this).attr('data-id');
+        var base_url = $('#base_url').val();
+        if(confirm('Do you really want to delete this recored?')){
+           $.ajax({
+               type: "POST",
+               url: base_url+"delete-reored",
+               data: {
+                   srno : id
+               },
+           });
+        }
+    });
+</script>
