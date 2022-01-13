@@ -17,94 +17,85 @@ class Welcome extends CI_Controller
 	{
 		$Email=$this->input->post("User");
 		$Pass=$this->input->post("Pass");
-		$this->session->set_userdata('login',$this->home->Check($Email,$Pass));
-		if($this->session->userdata['login']==1){
-			// 	$this->ShowUser();
-			// base_url('');
-			// base_url('users');
+		$data = $this->home->Check($Email,$Pass);
+		$this->session->set_userdata('UADMINID',$data[0]['srno']);
+		$this->session->set_userdata('UNAME',$data[0]['name']);
+		if(!empty($this->session->userdata('UADMINID'))){
 			redirect('users','refresh',301);
-
 		} else {
 			echo "<script>alert('Please enter valid Email ID or Password')</script>";
 			$this->load->view("login");
-			// base_url('users','refresh',301);
 		}
 	}
 	public function logout()
 	{
-		// session_destroy();
+		$this->session->unset_userdata('UADMINID');
+		$this->session->unset_userdata('UNAME');
 		$this->load->view("login");
 	}
 	public function ShowUser()
 	{
-		if($this->session->userdata['login']==1)
-		{
+		if(!empty($this->session->userdata('UADMINID'))){
 			$data['result']=$this->home->getUserList();
 			$this->load->view("UserList",$data);
-		}
-		else
+		} else{
 			$this->load->view("login");
+		}
 	}
 	public function DeleteUser()
 	{
-		if(!empty($this->input->post()){
+		if(!empty($this->input->post())){
 			$this->home->DeleteUser($id);
 			$this->session->set_flashdata('success','Recored deleted');
 			$this->load->view('users');
-			// redirect('users','refresh',301);
 		} else {
 			$this->session->set_flashdata('error','Unable Recored deleted');
+			redirect('default_controller','refresh',301);
 		}
 	}
 	public function register()
 	{
-		if(!$this->session->set_userdata['login']==1)
+		if(!empty($this->session->userdata('UADMINID'))){
+			$this->load->view("Register");
+		} else {
 			$this->load->view("login");
-		$this->load->view("Register");
+		}
 	}
 	public function InsertUser()
 	{
 		$back=$this->input->post("Back");
-		if($back==1)
-		{
-			$this->ShowUser();
-		}
-		else
-		{
-		  $img=$_FILES["Img"];
-		  if(file_exists("./UserImg/".$img['name']))
-		  {
-			  echo "<script>alert('Image allready exists!');</script>";
-			  $this->register();
-		  }
-		  elseif($img['type']=="image/jpeg" or $img['type']=="image/jpg" or $img['type']=="image/png")
-		  {
-		  	$config["allowed_types"]="jpeg|jpg|png";
-		  	$config["upload_path"]="./UserImg/";
-		  	$this->load->library("upload",$config);
-		  	if($this->upload->do_upload("Img"))
-		  	{
-		  		$user["Img"]=$img["name"];
-		  		$user["Name"]=$this->input->post("Name");
-		  		$user["Mob"]=$this->input->post("Mob");
-		  		$user["Address"]=$this->input->post("Address");
-		  		$user["City"]=$this->input->post("City");
-		  		$user["Design"]=$this->input->post("Design");
-		  		$user["Email"]=$this->input->post("Email");
-		  		$user["Pass"]=$this->input->post("Pass");
-		  		$inserted=$this->home->InsertUser($user);
-		  		if($inserted==1)
-		  			$this->ShowUser();
-		  		else
-		  			$this->load->view("Register.php");
-		  	}
-		  	else
+		if($back==1){
+			redirect('users','refresh',301);
+		} else {
+			$img=$_FILES["Img"];
+			if(file_exists("./UserImg/".$img['name'])){
+				echo "<script>alert('Image allready exists!');</script>";
+				redirect('register-user','refresh',301);
+			} else if($img['type']=="image/jpeg" or $img['type']=="image/jpg" or $img['type']=="image/png"){
+				$config["allowed_types"]="jpeg|jpg|png";
+				$config["upload_path"]="./UserImg/";
+				$this->load->library("upload",$config);
+				if($this->upload->do_upload("Img")) {
+					$user["Img"]=$img["name"];
+		  			$user["Name"]=$this->input->post("Name");
+		  			$user["Mob"]=$this->input->post("Mob");
+		  			$user["Address"]=$this->input->post("Address");
+		  			$user["City"]=$this->input->post("City");
+		  			$user["Design"]=$this->input->post("Design");
+		  			$user["Email"]=$this->input->post("Email");
+		  			$user["Pass"]=$this->input->post("Pass");
+		  			$inserted=$this->home->InsertUser($user);
+		  			if($inserted==1){
+						  redirect('users','refresh',301);
+					  } else{
+						  $this->load->view("Register.php");
+					  }
+		  	} else{
 		  		print_r($this->upload->data());
-		  }
-		  else
-		  {
+			  } 
+		  } else {
 		  	echo "<script>alert('Image is not valid');</script>";
-		  	$this->register();
+		  	redirect('register-user','refresh',301);
 		  }
 		}
 	}
@@ -122,13 +113,13 @@ class Welcome extends CI_Controller
 			if($updated==1)
 			{
 				echo "<script>alert('Updation Sucdessful!');</script>";
-				$this->ShowUser();
+				redirect('users','refresh',301);
 			}			
 			else
 				echo "<script>alert('updation failed');</script>";
 		}
 		elseif($edit==2)
-			$this->ShowUser();
+			redirect('users','refresh',301);
 		else
 			$this->load->view("EditUser",$update);
 	}

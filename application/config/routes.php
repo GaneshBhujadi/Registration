@@ -56,5 +56,7 @@ $route['translate_uri_dashes'] = FALSE;
 
 $route['check_login'] = 'welcome/Valid';
 $route['users'] = 'welcome/ShowUser';
+$route['register-user'] = 'welcome/register';
 $route['edit/(:num)'] = 'welcome/DeleteUser/$1';
-$route['delete'] = 'welcome/DeleteUser';
+$route['delete-reored'] = 'welcome/DeleteUser';
+$route['logout'] = 'welcome/logout';

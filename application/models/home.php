@@ -3,12 +3,13 @@
 
 class home extends CI_Model 
 {
-	public function Check($Email,$Pass)
+	public function Check($email,$pass)
 	{
-		$q=$this->db->query("select Name from Users where Email LIKE BINARY '$Email' && Pass LIKE BINARY '$Pass' && Design='Admin'");
-		$row=$q->result();
-		if(sizeof($row)==1)
-			return 1;
+		$this->db->select('srno,name');
+		$this->db->from(USERS);
+		$this->db->where('email',$email);
+		$this->db->where('pass',$pass);
+		return $this->db->get()->result_array();
 	}
 	public function getUserList()
 	{

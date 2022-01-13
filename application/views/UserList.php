@@ -28,12 +28,8 @@
  <body>
   <center><div id="container">
    <h1>User List</h1>
-   <form action="register" method="post">
-    <button id="add"><i class="fas fa-plus-square"></i> Create</button>
-   </form>
-   <form action="logout" method="post">
-    <button id="logout">Logout <i class="fas fa-sign-out-alt"></i></button>
-   </form>
+    <a id="add" href="register-user"><i class="fas fa-plus-square"></i> Create</a>
+    <a id="logout" href="<?php echo base_url('logout');?>">Logout <i class="fas fa-sign-out-alt"></i></a>
    <table id="UserList">
     <tr id="tr1">
      <th>Profile Img.</th>
@@ -75,6 +71,7 @@
  </body>
 </html>
 <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"> </script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <script>
     $("#delete").click(function () { 
         var id = $(this).attr('data-id');

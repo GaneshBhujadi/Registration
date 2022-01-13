@@ -4,7 +4,7 @@
   <style>
    input[type="text"],input[type="number"],input[type="password"],textarea,select{ width:250; }
    td{padding:10px;}
-   input[type="submit"]{width:100; height:30; border-radius:10px;}
+   input[type="submit"],button{width:100; height:30; border-radius:10px;}
    input[type="submit"]:hover{background-color:green; color:white;}
   </style>
   <script>
@@ -44,17 +44,36 @@
     <td><input type="password" placeholder="Password" name="Pass" required></td>
    </tr>
    <tr>
-    <td>Profile Photo :<br><img src="UserImg/Img.jpg" height="100px" width="100px"><br><input type="file" name="Img"></td>
+    <td>Profile Photo :<br><img src="UserImg/Img.jpg" id="imgPreview" accept=".jpg,.jpeg,.png" height="150px" width="150px"><br><input type="file" id="photo" name="Img"></td>
    </tr>	
    <tr>
     <td><input type="submit" value="Register"></td>
    
   </form>
-  <form action="InsertUser" method="post">
+  <!-- <form action="InsertUser" method="post">
    <input type="hidden" name="Back" value="1">
    <td><input type="submit" value="Back"></td>
-  </form>
+  </form> -->
+  <td><a href="<?php echo base_url('users');?>"><button>Back</button></a></td>
   </tr>
   </table>
  </body>
 </html>
+<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"> </script>
+<script>
+  $(document).ready(()=>{
+    $('#photo').change(function(){
+		const file = this.files[0];
+		console.log(file);
+		if (file){
+		let reader = new FileReader();
+		reader.onload = function(event){
+			console.log(event.target.result);
+			$('#imgPreview').attr('src', event.target.result);
+		}
+		reader.readAsDataURL(file);
+		}
+	});
+	});
+
+</script>
